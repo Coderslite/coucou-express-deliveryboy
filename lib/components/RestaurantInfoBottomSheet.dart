@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/main.dart';
 import 'package:food_delivery/model/OrderModel.dart';
 import 'package:food_delivery/model/RestaurantsModel.dart';
-import 'package:food_delivery/utils/Colors.dart';
-import 'package:food_delivery/utils/Common.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import 'OrderBottomDetails.dart';
 
 class RestaurantInfoBottomSheet extends StatefulWidget {
   final OrderModel? oderData;
@@ -36,145 +35,29 @@ class RestaurantInfoBottomSheetState extends State<RestaurantInfoBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<RestaurantsModel>(
-      future: restaurantsServices.getRestaurantById(
-          restaurantId: widget.oderData!.restaurantId),
-      builder: (_, snap) {
-        RestaurantsModel? data = snap.data;
+    return widget.oderData!.restaurantId == null ||
+            widget.oderData!.restaurantId == ''
+        ? OrderBottomDetail(
+            oderData: widget.oderData!,
+            data: RestaurantsModel(),
+            validRestaurant: false,
+          )
+        : FutureBuilder<RestaurantsModel>(
+            future: restaurantsServices.getRestaurantById(
+                restaurantId: widget.oderData!.restaurantId),
+            builder: (_, snap) {
+              RestaurantsModel? data = snap.data;
 
-        if (snap.hasData) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            child: Column(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        commonCachedNetworkImage(data!.photoUrl,
-                                width: 60, fit: BoxFit.cover)
-                            .cornerRadiusWithClipRRect(defaultRadius),
-                        8.width,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                style: primaryTextStyle(size: 15),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '${data.restaurantName}',
-                                      style: boldTextStyle(size: 20)),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ).expand(),
-                      ],
-                    ).paddingAll(8),
-                    Row(
-                      children: [
-                        Icon(Icons.call, color: blueButtonColor).onTap(() {
-                          launch('tel://${data.restaurantContact}');
-                        }),
-                        8.width,
-                        // Text(data.restaurantContact!,
-                        //         style: primaryTextStyle(size: 15))
-                        //     .onTap(() {
-                        //   launch('tel://${data.restaurantContact}');
-                        // }),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.home, color: blueButtonColor),
-                        8.width,
-                        Text('${data.restaurantAddress}',
-                                style: secondaryTextStyle(size: 14),
-                                maxLines: 2)
-                            .expand(),
-                      ],
-                    ),
-                    16.height,
-                    Text('Order Items', style: boldTextStyle())
-                        .paddingOnly(left: 8, right: 8),
-                    8.height,
-                    ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: widget.oderData!.orderItems!.length,
-                      itemBuilder: (_, index) {
-                        OrderItems data = widget.oderData!.orderItems![index];
-                        return Container(
-                          padding: EdgeInsets.all(8),
-                          margin: EdgeInsets.all(8),
-                          decoration: boxDecorationWithShadow(
-                              borderRadius: radius(),
-                              backgroundColor: context.cardColor),
-                          child: Row(
-                            children: [
-                              commonCachedNetworkImage(
-                                data.image,
-                                fit: BoxFit.cover,
-                                height: 50,
-                                width: 50,
-                              ).cornerRadiusWithClipRRect(25),
-                              8.width,
-                              Text('${data.itemName}', style: boldTextStyle())
-                                  .expand(),
-                              Text(
-                                  '${data.itemPrice.toCurrencyAmount()} x ${data.qty}',
-                                  style: primaryTextStyle())
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                    8.height,
-                    Container(
-                        decoration: boxDecorationWithShadow(
-                            borderRadius: radius(),
-                            backgroundColor: appStore.isDarkMode
-                                ? context.cardColor
-                                : primaryColor),
-                        padding: EdgeInsets.all(8),
-                        margin: EdgeInsets.only(left: 8, right: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(appStore.translate('total'),
-                                style: boldTextStyle(color: white)),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                    widget.oderData!.totalAmount
-                                        .toCurrencyAmount()
-                                        .toString()
-                                        .validate(),
-                                    style: secondaryTextStyle(color: white)),
-                                4.height,
-                                Text(appStore.translate('delivery_charges'),
-                                    style: secondaryTextStyle(
-                                        size: 10, color: white)),
-                              ],
-                            ),
-                          ],
-                        ))
-                  ],
-                ),
-              ],
-            ).paddingAll(8),
+              if (snap.hasData) {
+                return OrderBottomDetail(
+                  oderData: widget.oderData!,
+                  data: data!,
+                  validRestaurant: true,
+                );
+              } else {
+                return snapWidgetHelper(snap);
+              }
+            },
           );
-        } else {
-          return snapWidgetHelper(snap);
-        }
-      },
-    );
   }
 }

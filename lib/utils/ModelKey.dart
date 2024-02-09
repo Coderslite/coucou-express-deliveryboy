@@ -19,14 +19,26 @@ class OrderKey {
   static String paymentStatus = 'paymentStatus';
   static String restaurantCity = 'restaurantCity';
   static String orderId = 'orderId';
+  static String orderType = 'orderType';
+  static String orderUrl = 'orderUrl';
+  static String receiptUrl = 'receiptUrl';
   static String deliveryCharge = 'deliveryCharge';
   static String restaurantName = 'restaurantName';
+  static String taken = 'taken';
+  static String timeRemaining = 'acceptOrderTimeRemaining';
+  static String pavilionNo = 'pavilionNo';
+  static String deliveryLocation = 'deliveryLocation';
+  static String deliveryAddress = 'deliveryAddress';
+  static String deliveryAddressDescription = 'deliveryAddressDescription';
+  static String otherInformation = 'otherInformation';
 }
 
 class RestaurantsKey {
   static String restaurantAddress = 'restaurantAddress';
   static String photoUrl = 'photoUrl';
   static String restaurantName = 'restaurantName';
+  static String restaurantLocation = 'restaurantLocation';
+  static String restaurantAddresss = 'restaurantAddress';
   static String restaurantContact = 'restaurantPhoneNumber';
 }
 
@@ -48,13 +60,15 @@ class UserKey {
   static String email = 'email';
   static String role = 'role';
   static String address = 'address';
-  static String number = 'number';
+  static String number = 'phoneNumber';
   static String loginType = 'loginType';
   static String city = 'city';
   static String isDeleted = 'isDeleted';
   static String oneSignalPlayerId = 'oneSignalPlayerId';
   static String isTester = 'isTester';
   static String availabilityStatus = 'availabilityStatus';
+  static String latitude = 'latitude';
+  static String longitude = 'longitude';
 }
 
 class OrderItemsKey {
@@ -62,4 +76,5 @@ class OrderItemsKey {
   static String image = 'image';
   static String itemPrice = 'itemPrice';
   static String qty = 'qty';
+  static String isSuggestedPrice = 'isSuggestedPrice';
 }

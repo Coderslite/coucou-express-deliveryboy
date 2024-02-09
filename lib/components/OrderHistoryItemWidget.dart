@@ -3,9 +3,8 @@ import 'package:food_delivery/main.dart';
 import 'package:food_delivery/model/OrderModel.dart';
 import 'package:food_delivery/model/UserModel.dart';
 import 'package:food_delivery/screen/OrderDetailScreen.dart';
-import 'package:food_delivery/screen/TrackingScreen.dart';
 import 'package:food_delivery/utils/Colors.dart';
-import 'package:food_delivery/utils/Constants.dart';
+import 'package:food_delivery/utils/Common.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -121,7 +120,10 @@ class OrderHistoryItemWidgetState extends State<OrderHistoryItemWidget> {
                   children: [
                     Icon(Icons.home, color: blueButtonColor.withOpacity(0.6)),
                     4.width,
-                    Text(widget.orderData!.userAddress!,
+                    Text(
+                            widget.orderData!.deliveryLocation == "Inside UCAD"
+                                ? widget.orderData!.pavilionNo!
+                                : widget.orderData!.deliveryAddresss!,
                             style: secondaryTextStyle(),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis)
@@ -144,12 +146,7 @@ class OrderHistoryItemWidgetState extends State<OrderHistoryItemWidget> {
                       child: Text(appStore.translate('track'),
                           style: boldTextStyle(color: Colors.white)),
                       color: primaryColor,
-                    ).visible(
-                        widget.orderData!.orderStatus != ORDER_STATUS_COMPLETE),
-                    Text(widget.orderData!.totalAmount.toCurrencyAmount(),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: boldTextStyle(color: primaryColor, size: 18)),
+                    ).visible(false),
                   ],
                 )
               ],

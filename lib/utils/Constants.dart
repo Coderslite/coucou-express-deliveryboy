@@ -1,6 +1,8 @@
-const mAppName = 'Mighty Food Delivery';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+const mAppName = 'Coucou Express Delivery';
 const mAppInfo =
-    '$mAppName Piping hot food at your doorstep is like a dream come true with the Mighty Food App. Build a user-friendly and appetizing Food Delivery mobile app for your cafe or restaurant business. It is packed with features and functions which get you going in literally no time! With 3 different modules - Mighty User, Mighty Admin and Mighty Delivery, you can stick to either of and manage your food delivery service with excellence. So take your business to next level by offering food deliveries anytime, anywhere for your customers. Mighty Food App is a complete solution when it comes to food delivery, bakery or even fast food businesses.';
+    '$mAppName Piping hot food at your doorstep is like a dream come true with the Coucou Express Food App. Build a user-friendly and appetizing Food Delivery mobile app for your cafe or restaurant business. It is packed with features and functions which get you going in literally no time! With 3 different modules - Coucou Express User, Coucou Express Admin and Coucou Express Delivery, you can stick to either of and manage your food delivery service with excellence. So take your business to next level by offering food deliveries anytime, anywhere for your customers. Coucou Express Food App is a complete solution when it comes to food delivery, bakery or even fast food businesses.';
 
 const googleMapAPIKey = 'AIzaSyDyo03HSxBbnRA1tKm2fEGKzyNS7gHOX3k';
 const mOneSignalAppId = 'ADD_YOUR_ONE_SIGNAL_APP_ID';
@@ -9,11 +11,12 @@ const mOneSignalChannelId = 'ADD_YOUR_ONE_SIGNAL_CHANNEL_ID';
 
 //region URLs & Keys
 
-const supportURL = 'https://support.meetmighty.com/';
+const supportURL = 'https://support.meetCoucou Express.com/';
 const codeCanyonURL = '';
 const helpSupport =
-    'https://meetmighty.com/codecanyon/document/mightynews/index.html';
-const Privacy_Policy = 'https://meetmighty.com/codecanyon/document/mightyfood/';
+    'https://meetCoucou Express.com/codecanyon/document/Coucou Expressnews/index.html';
+const Privacy_Policy =
+    'https://meetCoucou Express.com/codecanyon/document/Coucou Expressfood/';
 
 //App store URL
 const appStoreBaseUrl = 'https://www.apple.com/app-store/';
@@ -56,16 +59,13 @@ const TERMS_AND_CONDITION_PREF = 'TermsAndConditionPref';
 const PRIVACY_POLICY_PREF = 'PrivacyPolicyPref';
 
 /* order Status key */
-const ORDER_STATUS_PENDING = 'Pending';
-const ORDER_STATUS_RECEIVED = 'Order Received';
-const ORDER_STATUS_PICKUP = 'Pickup';
-const ORDER_STATUS_NEW = 'New';
-const ORDER_STATUS_COOKING = 'Cooking';
-const ORDER_STATUS_ASSIGNED = 'Assigned';
-const ORDER_STATUS_READY = 'Ready';
-const ORDER_STATUS_DELIVERING = 'Delivering';
-const ORDER_STATUS_COMPLETE = 'Completed';
-const ORDER_STATUS_CANCELLED = 'Cancelled';
+const ORDER_PENDING = 'Pending';
+const ORDER_RECEIVED = 'Received';
+const ORDER_ACCEPTED = 'Accepted';
+const ORDER_PICKUP = 'Pickup';
+const ORDER_DELIVERED = 'Delivered';
+const ORDER_CANCELLED = 'Cancelled';
+const ORDER_UPDATED = 'Order Updated';
 
 const ORDER_PAYMENT_METHOD = 'paymentMethod';
 const ORDER_PAYMENT_STATUS = 'paymentStatus';
@@ -85,3 +85,12 @@ const StreamRefresh = 'StreamRefresh';
 
 const ORDER_IMAGE = 'images/order.png';
 const DocLimit = 10;
+
+const FIREBASE_FUNCTION_URL =
+    'https://us-central1-coucouexpress-502d4.cloudfunctions.net/api';
+
+const img =
+    "https://cdn.pixabay.com/photo/2017/06/10/07/18/list-2389219_1280.png";
+
+const AROUND_UCAD_CHARGES = 500;
+const UCAD_LOCATION = LatLng(14.697570, -17.467470);

@@ -25,6 +25,7 @@ import 'package:shared_preferences_foundation/shared_preferences_foundation.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher_ios/url_launcher_ios.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_keyboard_visibility_linux/flutter_keyboard_visibility_linux.dart';
 import 'package:image_picker_linux/image_picker_linux.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -38,6 +39,7 @@ import 'package:path_provider_foundation/path_provider_foundation.dart';
 import 'package:shared_preferences_foundation/shared_preferences_foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher_macos/url_launcher_macos.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_keyboard_visibility_windows/flutter_keyboard_visibility_windows.dart';
 import 'package:image_picker_windows/image_picker_windows.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -244,6 +246,16 @@ class _PluginRegistrant {
       }
 
       try {
+        DeviceInfoPlusLinuxPlugin.registerWith();
+      } catch (err) {
+        print(
+          '`device_info_plus` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+        rethrow;
+      }
+
+      try {
         FlutterKeyboardVisibilityPluginLinux.registerWith();
       } catch (err) {
         print(
@@ -375,6 +387,16 @@ class _PluginRegistrant {
       }
 
     } else if (Platform.isWindows) {
+      try {
+        DeviceInfoPlusWindowsPlugin.registerWith();
+      } catch (err) {
+        print(
+          '`device_info_plus` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+        rethrow;
+      }
+
       try {
         FlutterKeyboardVisibilityPluginWindows.registerWith();
       } catch (err) {

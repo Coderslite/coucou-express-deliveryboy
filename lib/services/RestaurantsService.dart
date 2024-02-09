@@ -24,4 +24,5 @@ class RestaurantsService extends BaseService {
       throw error.toString();
     });
   }
+
 }

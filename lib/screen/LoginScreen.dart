@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -26,6 +27,8 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   FocusNode emailFocus = FocusNode();
   FocusNode passwordFocus = FocusNode();
 
@@ -41,21 +44,32 @@ class LoginScreenState extends State<LoginScreen> {
     Geolocator.requestPermission();
   }
 
+  void updateToken(String userId) async {
+    var prefs = await SharedPreferences.getInstance();
+    var token = await _firebaseMessaging.getToken();
+    prefs.setString(PLAYER_ID, token.toString());
+
+    userService.updateDocument(getStringAsync(USER_ID), {
+      "oneSignalPlayerId": token,
+    });
+  }
+
   Future<void> signIn() async {
     if (await checkPermission()) {
-      if (getStringAsync(PLAYER_ID).isEmpty) {
-        await saveOneSignalPlayerId().then((value) {
-          if (getStringAsync(PLAYER_ID).isEmpty) return toast(errorMessage);
-        });
-      }
       if (formKey.currentState!.validate()) {
         appStore.setLoading(true);
 
-        await authService.signInWithEmailPassword(email: emailController.text.trim(), password: passController.text.trim()).then((value) async {
+        await authService
+            .signInWithEmailPassword(
+                email: emailController.text.trim(),
+                password: passController.text.trim())
+            .then((value) async {
           appStore.setLoading(false);
 
-          if (getIntAsync(USER_CHECK) == 0 && getStringAsync(USER_ROLE) == DELIVERY_BOY) {
-            toast('You profile is under review. Wait some time or contact your administrator.');
+          if (getIntAsync(USER_CHECK) == 0 &&
+              getStringAsync(USER_ROLE) == DELIVERY_BOY) {
+            toast(
+                'You profile is under review. Wait some time or contact your administrator.');
             appStore.setLoggedIn(false);
           } else {
             appStore.setLoggedIn(true);
@@ -99,24 +113,30 @@ class LoginScreenState extends State<LoginScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(appStore.translate('sign_in'), style: boldTextStyle(size: 25)),
+                        Text(appStore.translate('sign_in'),
+                            style: boldTextStyle(size: 25)),
                         16.height,
                         AppTextField(
                           focus: emailFocus,
                           nextFocus: passwordFocus,
                           controller: emailController,
                           textFieldType: TextFieldType.EMAIL,
-                          errorThisFieldRequired: appStore.translate('this_field_is_required'),
-                          decoration: buildInputDecoration(appStore.translate('email')),
+                          errorThisFieldRequired:
+                              appStore.translate('this_field_is_required'),
+                          decoration:
+                              buildInputDecoration(appStore.translate('email')),
                         ),
                         16.height,
                         AppTextField(
                           controller: passController,
                           focus: passwordFocus,
                           textFieldType: TextFieldType.PASSWORD,
-                          errorThisFieldRequired: appStore.translate('this_field_is_required'),
-                          errorMinimumPasswordLength: appStore.translate('minimum_password_length'),
-                          decoration: buildInputDecoration(appStore.translate('password')),
+                          errorThisFieldRequired:
+                              appStore.translate('this_field_is_required'),
+                          errorMinimumPasswordLength:
+                              appStore.translate('minimum_password_length'),
+                          decoration: buildInputDecoration(
+                              appStore.translate('password')),
                           onFieldSubmitted: (val) {
                             signIn();
                           },
@@ -124,13 +144,17 @@ class LoginScreenState extends State<LoginScreen> {
                         16.height,
                         Align(
                           alignment: Alignment.centerRight,
-                          child: Text(appStore.translate('forgot_password'), style: primaryTextStyle(color: errorColor), textAlign: TextAlign.start).onTap(() {
+                          child: Text(appStore.translate('forgot_password'),
+                                  style: primaryTextStyle(color: errorColor),
+                                  textAlign: TextAlign.start)
+                              .onTap(() {
                             ForgotPasswordScreen().launch(context);
                           }),
                         ),
                         16.height,
                         AppButton(
-                          shapeBorder: RoundedRectangleBorder(borderRadius: radius(50)),
+                          shapeBorder:
+                              RoundedRectangleBorder(borderRadius: radius(50)),
                           color: primaryColor,
                           width: context.width(),
                           onTap: () {
@@ -141,25 +165,31 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         16.height,
                         AppButton(
-                          shapeBorder: RoundedRectangleBorder(borderRadius: radius(50)),
+                          shapeBorder:
+                              RoundedRectangleBorder(borderRadius: radius(50)),
                           onTap: () async {
                             if (await checkPermission()) {
                               if (getStringAsync(PLAYER_ID).isEmpty) {
                                 await saveOneSignalPlayerId();
-                                if (getStringAsync(PLAYER_ID).isEmpty) return toast(errorMessage);
+                                if (getStringAsync(PLAYER_ID).isEmpty)
+                                  return toast(errorMessage);
                               }
                               appStore.setLoading(true);
 
                               authService.signInWithGoogle().then((value) {
                                 appStore.setLoading(false);
 
-                                if (getIntAsync(USER_CHECK) == 0 && getStringAsync(USER_ROLE) == DELIVERY_BOY) {
-                                  toast(appStore.translate('you_are_not_approved_by_admin_yet_contact_your_administrator'));
+                                if (getIntAsync(USER_CHECK) == 0 &&
+                                    getStringAsync(USER_ROLE) == DELIVERY_BOY) {
+                                  toast(appStore.translate(
+                                      'you_are_not_approved_by_admin_yet_contact_your_administrator'));
                                 } else {
                                   if (value.number.validate().isNotEmpty) {
-                                    DashboardScreen().launch(context, isNewTask: true);
+                                    DashboardScreen()
+                                        .launch(context, isNewTask: true);
                                   } else {
-                                    CompleteProfileScreen(value).launch(context);
+                                    CompleteProfileScreen(value)
+                                        .launch(context);
                                   }
                                 }
                               }).catchError((error) {
@@ -174,7 +204,8 @@ class LoginScreenState extends State<LoginScreen> {
                             children: [
                               GoogleLogoWidget(),
                               20.width,
-                              Text(appStore.translate('continue_with_google'), style: primaryTextStyle(size: 16)),
+                              Text(appStore.translate('continue_with_google'),
+                                  style: primaryTextStyle(size: 16)),
                             ],
                           ),
                         ),
@@ -182,9 +213,12 @@ class LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(appStore.translate('have_an_account'), style: primaryTextStyle()),
+                            Text(appStore.translate('have_an_account'),
+                                style: primaryTextStyle()),
                             8.width,
-                            Text(appStore.translate('sign_up'), style: boldTextStyle(color: errorColor)).onTap(() {
+                            Text(appStore.translate('sign_up'),
+                                    style: boldTextStyle(color: errorColor))
+                                .onTap(() {
                               SignUpScreen().launch(context);
                             })
                           ],
@@ -195,7 +229,8 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            Observer(builder: (_) => Loader().center().visible(appStore.isLoading))
+            Observer(
+                builder: (_) => Loader().center().visible(appStore.isLoading))
           ],
         ),
       ),

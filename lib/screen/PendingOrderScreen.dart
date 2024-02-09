@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:food_delivery/components/PendingOrderItemWidget.dart';
+import 'package:food_delivery/functions/SendNotification.dart';
 import 'package:food_delivery/model/OrderModel.dart';
 import 'package:food_delivery/utils/Colors.dart';
 import 'package:food_delivery/utils/Common.dart';
@@ -10,10 +11,9 @@ import 'package:food_delivery/utils/Constants.dart';
 import 'package:food_delivery/utils/ModelKey.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:paginate_firestore/widgets/empty_display.dart';
 
 import '../main.dart';
-import 'TrackingScreen.dart';
+import 'OrderDetailScreen.dart';
 
 class PendingOrderScreen extends StatefulWidget {
   static String tag = '/OrderScreen';
@@ -23,6 +23,8 @@ class PendingOrderScreen extends StatefulWidget {
 }
 
 class PendingOrderScreenState extends State<PendingOrderScreen> {
+  Key uniqueKey = UniqueKey();
+
   @override
   void initState() {
     super.initState();
@@ -49,35 +51,86 @@ class PendingOrderScreenState extends State<PendingOrderScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: appBarWidget(appStore.translate('new_orders'), showBack: false),
-        body: getBoolAsync(AVAILABLE, defaultValue: true)
-            ? PaginateFirestore(
-                itemBuilder: (BuildContext context, items, index) {
-                  var order = items[index].data() as Map<String, dynamic>;
-                  return order['orderStatus'] == ORDER_STATUS_RECEIVED &&
-                          order['deliveryBoyId'] == null
-                      ? PendingOrderItemWidget(
+        body: getBoolAsync(AVAILABLE) == true
+            ? Column(
+                children: [
+                  Text(
+                    "You are unavailable to accept an order, kind change your availability status",
+                    style: boldTextStyle(color: orangeRed),
+                  ).paddingAll(10).visible(getBoolAsync(AVAILABLE) == false ||
+                      getBoolAsync(AVAILABLE).toString() == 'null'),
+                  Expanded(
+                    child: PaginateFirestore(
+                      key: uniqueKey,
+                      itemBuilder: (BuildContext context, items, index) {
+                        var order = items[index].data() as Map<String, dynamic>;
+                        // return order['orderStatus'] == NO_DRIVER_AVAILABLE
+                        return PendingOrderItemWidget(
+                          index: index,
                           orderData: OrderModel.fromJson(order),
                           onAccept: () {
                             setState(() {
-                              orderServices.updateDocument(items[index].id, {
-                                OrderKey.deliveryBoyId: getStringAsync(USER_ID),
+                              db
+                                  .collection("users")
+                                  .where('uid', isEqualTo: order['userId'])
+                                  .get()
+                                  .then((value) {
+                                var token = value.docs.first
+                                    .data()[UserKey.oneSignalPlayerId];
+                                print(token);
+                                List tokens = [];
+                                tokens.add(token);
+                                sendNotification(
+                                    tokens,
+                                    "Order Accepted",
+                                    "Your Order has been received, a delivery agent has been asigned",
+                                    order[OrderKey.orderId]);
+                                userService.updateDocument(
+                                  getStringAsync(USER_ID),
+                                  {
+                                    "availabilityStatus": false,
+                                  },
+                                );
+                                setBoolAsync(AVAILABLE, false);
+                                orderServices.updateDocument(items[index].id, {
+                                  OrderKey.deliveryBoyId:
+                                      getStringAsync(USER_ID),
+                                  "taken": true,
+                                  'orderStatus': ORDER_ACCEPTED,
+                                });
+                                OrderDetailScreen(
+                                  orderModel: OrderModel.fromJson(order),
+                                ).launch(context);
                               });
                             });
                           },
-                        )
-                      : Container();
-                },
-                itemBuilderType: PaginateBuilderType.listView,
-                query: orderServices.pendingOrderQuery(),
-                isLive: true,
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemsPerPage: DocLimit,
-                bottomLoader: Loader(),
-                initialLoader: Loader(),
-                onEmpty:EmptyDisplay(),
-                onError: (e) =>
-                    Text(e.toString(), style: primaryTextStyle()).center(),
+                        );
+                      },
+                      itemBuilderType: PaginateBuilderType.listView,
+                      query: orderServices.pendingOrderQuery(),
+                      isLive: true,
+                      physics: ClampingScrollPhysics(),
+                      // shrinkWrap: true,
+                      itemsPerPage: DocLimit,
+                      bottomLoader: Loader(),
+                      initialLoader: Loader(),
+                      onEmpty: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          commonCachedNetworkImage('images/Empty.png',
+                              height: 150, width: 150, fit: BoxFit.cover),
+                          16.height,
+                          Text(appStore.translate('order_not_found'),
+                              style: boldTextStyle()),
+                        ],
+                      ).center(),
+                      onError: (e) =>
+                          Text(e.toString(), style: primaryTextStyle())
+                              .center(),
+                    ),
+                  ),
+                ],
               )
             : Stack(
                 alignment: Alignment.center,

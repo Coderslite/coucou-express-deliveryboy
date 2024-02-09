@@ -18,6 +18,8 @@ class UserModel {
   String? oneSignalPlayerId;
   bool? isTester;
   bool? availabilityStatus;
+  double? longitude;
+  double? latitude;
 
   UserModel({
     this.photoUrl,
@@ -36,6 +38,8 @@ class UserModel {
     this.oneSignalPlayerId,
     this.isTester,
     this.availabilityStatus = true,
+    this.latitude,
+    this.longitude,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -47,15 +51,23 @@ class UserModel {
         email: json[UserKey.email],
         role: json[UserKey.role],
         address: json[UserKey.address],
-        number: json[UserKey.number],
+        number: json[UserKey.number] == null
+            ? json['number']
+            : json[UserKey.number],
         loginType: json[UserKey.loginType],
         city: json[UserKey.city],
         isDeleted: json[UserKey.isDeleted],
         oneSignalPlayerId: json[UserKey.oneSignalPlayerId],
         isTester: json[UserKey.isTester],
         availabilityStatus: json[UserKey.availabilityStatus],
-        createdAt: json[CommonKey.createdAt] != null ? (json[CommonKey.createdAt] as Timestamp).toDate() : null,
-        updatedAt: json[CommonKey.updatedAt] != null ? (json[CommonKey.updatedAt] as Timestamp).toDate() : null);
+        createdAt: json[CommonKey.createdAt] != null
+            ? (json[CommonKey.createdAt] as Timestamp).toDate()
+            : null,
+        updatedAt: json[CommonKey.updatedAt] != null
+            ? (json[CommonKey.updatedAt] as Timestamp).toDate()
+            : null,
+        longitude: json[UserKey.longitude],
+        latitude: json[UserKey.latitude]);
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +88,9 @@ class UserModel {
     data[UserKey.oneSignalPlayerId] = this.oneSignalPlayerId;
     data[UserKey.isTester] = this.isTester;
     data[UserKey.availabilityStatus] = this.availabilityStatus;
+    data[UserKey.longitude] = this.longitude;
+    data[UserKey.latitude] = this.latitude;
+
     return data;
   }
 }

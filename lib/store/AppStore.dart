@@ -37,6 +37,28 @@ abstract class _AppStore with Store {
   @observable
   AppLocalizations? appLocale;
 
+  @observable
+  bool receiptUploaded = false;
+
+  @observable
+  String currency = 'CFA';
+
+  @observable
+  double constantDeliveryCharge = 0.0;
+
+  @observable
+  double kmDeliveryCharge = 0.0;
+
+  @action
+  void setConstantDeliveryCharge(double value) {
+    constantDeliveryCharge = value;
+  }
+
+  @action
+  void setKmDeliveryCharge(double value) {
+    kmDeliveryCharge = value;
+  }
+
   @action
   void setAppLocalization(BuildContext context) {
     appLocale = AppLocalizations.of(context);
@@ -45,6 +67,7 @@ abstract class _AppStore with Store {
   String translate(String key) {
     return appLocale!.translate(key);
   }
+
   @action
   void setLanguage(String val) {
     selectedLanguage = val;
@@ -94,7 +117,21 @@ abstract class _AppStore with Store {
 
     appBarTheme = AppBarTheme(
       brightness: appStore.isDarkMode ? Brightness.dark : Brightness.light,
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: appStore.isDarkMode ? Brightness.dark : Brightness.light),
+      systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness:
+              appStore.isDarkMode ? Brightness.dark : Brightness.light),
     );
+  }
+
+  @action
+  Future<void> setReceiptUpload(bool receiptUpload) async {
+    receiptUploaded = receiptUpload;
+  }
+
+  @action
+  Future<void> changeCurrency(String cur) async {
+    currency = cur;
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('currenct', cur);
   }
 }

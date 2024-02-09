@@ -6,10 +6,11 @@ part of 'AppStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AppStore on _AppStore, Store {
-  final _$primaryColorAtom = Atom(name: '_AppStore.primaryColor');
+  late final _$primaryColorAtom =
+      Atom(name: '_AppStore.primaryColor', context: context);
 
   @override
   Color get primaryColor {
@@ -24,7 +25,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$isLoggedInAtom = Atom(name: '_AppStore.isLoggedIn');
+  late final _$isLoggedInAtom =
+      Atom(name: '_AppStore.isLoggedIn', context: context);
 
   @override
   bool get isLoggedIn {
@@ -39,7 +41,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$isLoadingAtom = Atom(name: '_AppStore.isLoading');
+  late final _$isLoadingAtom =
+      Atom(name: '_AppStore.isLoading', context: context);
 
   @override
   bool get isLoading {
@@ -54,7 +57,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$isDarkModeAtom = Atom(name: '_AppStore.isDarkMode');
+  late final _$isDarkModeAtom =
+      Atom(name: '_AppStore.isDarkMode', context: context);
 
   @override
   bool get isDarkMode {
@@ -69,7 +73,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$userCurrentCityAtom = Atom(name: '_AppStore.userCurrentCity');
+  late final _$userCurrentCityAtom =
+      Atom(name: '_AppStore.userCurrentCity', context: context);
 
   @override
   String get userCurrentCity {
@@ -84,7 +89,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$appBarThemeAtom = Atom(name: '_AppStore.appBarTheme');
+  late final _$appBarThemeAtom =
+      Atom(name: '_AppStore.appBarTheme', context: context);
 
   @override
   AppBarTheme get appBarTheme {
@@ -99,7 +105,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$selectedLanguageAtom = Atom(name: '_AppStore.selectedLanguage');
+  late final _$selectedLanguageAtom =
+      Atom(name: '_AppStore.selectedLanguage', context: context);
 
   @override
   String get selectedLanguage {
@@ -114,7 +121,8 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$appLocaleAtom = Atom(name: '_AppStore.appLocale');
+  late final _$appLocaleAtom =
+      Atom(name: '_AppStore.appLocale', context: context);
 
   @override
   AppLocalizations? get appLocale {
@@ -129,8 +137,73 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
-  final _$setUserCurrentCityAsyncAction =
-      AsyncAction('_AppStore.setUserCurrentCity');
+  late final _$receiptUploadedAtom =
+      Atom(name: '_AppStore.receiptUploaded', context: context);
+
+  @override
+  bool get receiptUploaded {
+    _$receiptUploadedAtom.reportRead();
+    return super.receiptUploaded;
+  }
+
+  @override
+  set receiptUploaded(bool value) {
+    _$receiptUploadedAtom.reportWrite(value, super.receiptUploaded, () {
+      super.receiptUploaded = value;
+    });
+  }
+
+  late final _$currencyAtom =
+      Atom(name: '_AppStore.currency', context: context);
+
+  @override
+  String get currency {
+    _$currencyAtom.reportRead();
+    return super.currency;
+  }
+
+  @override
+  set currency(String value) {
+    _$currencyAtom.reportWrite(value, super.currency, () {
+      super.currency = value;
+    });
+  }
+
+  late final _$constantDeliveryChargeAtom =
+      Atom(name: '_AppStore.constantDeliveryCharge', context: context);
+
+  @override
+  double get constantDeliveryCharge {
+    _$constantDeliveryChargeAtom.reportRead();
+    return super.constantDeliveryCharge;
+  }
+
+  @override
+  set constantDeliveryCharge(double value) {
+    _$constantDeliveryChargeAtom
+        .reportWrite(value, super.constantDeliveryCharge, () {
+      super.constantDeliveryCharge = value;
+    });
+  }
+
+  late final _$kmDeliveryChargeAtom =
+      Atom(name: '_AppStore.kmDeliveryCharge', context: context);
+
+  @override
+  double get kmDeliveryCharge {
+    _$kmDeliveryChargeAtom.reportRead();
+    return super.kmDeliveryCharge;
+  }
+
+  @override
+  set kmDeliveryCharge(double value) {
+    _$kmDeliveryChargeAtom.reportWrite(value, super.kmDeliveryCharge, () {
+      super.kmDeliveryCharge = value;
+    });
+  }
+
+  late final _$setUserCurrentCityAsyncAction =
+      AsyncAction('_AppStore.setUserCurrentCity', context: context);
 
   @override
   Future<void> setUserCurrentCity(String val) {
@@ -138,21 +211,63 @@ mixin _$AppStore on _AppStore, Store {
         .run(() => super.setUserCurrentCity(val));
   }
 
-  final _$setLoggedInAsyncAction = AsyncAction('_AppStore.setLoggedIn');
+  late final _$setLoggedInAsyncAction =
+      AsyncAction('_AppStore.setLoggedIn', context: context);
 
   @override
   Future<void> setLoggedIn(bool val) {
     return _$setLoggedInAsyncAction.run(() => super.setLoggedIn(val));
   }
 
-  final _$setDarkModeAsyncAction = AsyncAction('_AppStore.setDarkMode');
+  late final _$setDarkModeAsyncAction =
+      AsyncAction('_AppStore.setDarkMode', context: context);
 
   @override
   Future<void> setDarkMode(bool aIsDarkMode) {
     return _$setDarkModeAsyncAction.run(() => super.setDarkMode(aIsDarkMode));
   }
 
-  final _$_AppStoreActionController = ActionController(name: '_AppStore');
+  late final _$setReceiptUploadAsyncAction =
+      AsyncAction('_AppStore.setReceiptUpload', context: context);
+
+  @override
+  Future<void> setReceiptUpload(bool receiptUpload) {
+    return _$setReceiptUploadAsyncAction
+        .run(() => super.setReceiptUpload(receiptUpload));
+  }
+
+  late final _$changeCurrencyAsyncAction =
+      AsyncAction('_AppStore.changeCurrency', context: context);
+
+  @override
+  Future<void> changeCurrency(String cur) {
+    return _$changeCurrencyAsyncAction.run(() => super.changeCurrency(cur));
+  }
+
+  late final _$_AppStoreActionController =
+      ActionController(name: '_AppStore', context: context);
+
+  @override
+  void setConstantDeliveryCharge(double value) {
+    final _$actionInfo = _$_AppStoreActionController.startAction(
+        name: '_AppStore.setConstantDeliveryCharge');
+    try {
+      return super.setConstantDeliveryCharge(value);
+    } finally {
+      _$_AppStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setKmDeliveryCharge(double value) {
+    final _$actionInfo = _$_AppStoreActionController.startAction(
+        name: '_AppStore.setKmDeliveryCharge');
+    try {
+      return super.setKmDeliveryCharge(value);
+    } finally {
+      _$_AppStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setAppLocalization(BuildContext context) {
@@ -208,7 +323,11 @@ isDarkMode: ${isDarkMode},
 userCurrentCity: ${userCurrentCity},
 appBarTheme: ${appBarTheme},
 selectedLanguage: ${selectedLanguage},
-appLocale: ${appLocale}
+appLocale: ${appLocale},
+receiptUploaded: ${receiptUploaded},
+currency: ${currency},
+constantDeliveryCharge: ${constantDeliveryCharge},
+kmDeliveryCharge: ${kmDeliveryCharge}
     ''';
   }
 }

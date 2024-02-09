@@ -21,35 +21,39 @@ class OrderService extends BaseService {
         OrderModel.fromJson(event.docs.first.data() as Map<String, dynamic>));
   }
 
-  Stream<List<OrderModel>> restaurantOrderServices({String? restaurantId}) {
-    return orderQuery(
-            city: appStore.userCurrentCity,
-            orderStatus: [ORDER_STATUS_COOKING],
-            restaurantId: restaurantId)
-        .snapshots()
-        .map((x) {
-      return x.docs
-          .map((y) => OrderModel.fromJson(y.data() as Map<String, dynamic>))
-          .toList();
-    });
-  }
+  // Stream<List<OrderModel>> restaurantOrderServices({String? restaurantId}) {
+  //   return orderQuery(
+  //           city: appStore.userCurrentCity,
+  //           orderStatus: [ORDER_STATUS_COOKING],
+  //           restaurantId: restaurantId)
+  //       .snapshots()
+  //       .map((x) {
+  //     return x.docs
+  //         .map((y) => OrderModel.fromJson(y.data() as Map<String, dynamic>))
+  //         .toList();
+  //   });
+  // }
 
-  Query orderQuery(
-      {String? restaurantId,
-      List<String>? orderStatus,
-      String? city,
-      String deliveryBoyId = ''}) {
+  Query orderQuery({
+    String? restaurantId,
+    List<String>? orderStatus,
+    String? city,
+    String deliveryBoyId = '',
+    bool? taken,
+  }) {
     if (deliveryBoyId.isEmpty) {
       print("delivery boy id is empty");
       return ref
           .where(OrderKey.restaurantCity, isEqualTo: city)
           .where(OrderKey.orderStatus, whereIn: orderStatus)
+          .where(OrderKey.taken, isEqualTo: taken)
           .orderBy(CommonKey.createdAt, descending: true);
     } else {
       return ref
           .where(OrderKey.restaurantCity, isEqualTo: city)
           .where(OrderKey.orderStatus, whereIn: orderStatus)
           .where(OrderKey.deliveryBoyId, isEqualTo: deliveryBoyId)
+          .where(OrderKey.taken, isEqualTo: taken)
           .orderBy(CommonKey.createdAt, descending: true);
     }
   }
@@ -64,12 +68,19 @@ class OrderService extends BaseService {
 
   Query orderQuery1() {
     return ref
-        .where(OrderKey.orderStatus, isEqualTo: ORDER_STATUS_COMPLETE)
+        .where(OrderKey.orderStatus, isEqualTo: ORDER_DELIVERED)
         .where(OrderKey.deliveryBoyId, isEqualTo: getStringAsync(USER_ID))
         .orderBy(CommonKey.createdAt, descending: true);
   }
 
   Query pendingOrderQuery() {
-    return ref;
+    return ref
+        .where('orderStatus', isEqualTo: ORDER_RECEIVED)
+        .where('deliveryBoyId', isEqualTo: null)
+        .where('taken', isEqualTo: false)
+        .orderBy('createdAt', descending: false);
+    // order['orderStatus'] == ORDER_STATUS_RECEIVED &&
+    //                       order['deliveryBoyId'] == getStringAsync(USER_ID) &&
+    //                       order['taken'] == false
   }
 }

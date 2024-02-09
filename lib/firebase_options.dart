@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAIcCd-I5JKJi84dUGWYVRAB5NVpTj0I6A',
-    appId: '1:485649260159:android:b9b61c7b3c74819cdde94a',
+    appId: '1:485649260159:android:2eae834c3037febbdde94a',
     messagingSenderId: '485649260159',
     projectId: 'coucouexpress-502d4',
     storageBucket: 'coucouexpress-502d4.appspot.com',
@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '485649260159',
     projectId: 'coucouexpress-502d4',
     storageBucket: 'coucouexpress-502d4.appspot.com',
-    androidClientId: '485649260159-v35tphao1fqnbai7orv74g72om3ukbrl.apps.googleusercontent.com',
+    androidClientId: '485649260159-0qosk6qn94gr883erjb239v80l3seide.apps.googleusercontent.com',
     iosClientId: '485649260159-60fe063e3fbe1puqe15j9oudk7vibiho.apps.googleusercontent.com',
     iosBundleId: 'com.example.foodDelivery',
   );

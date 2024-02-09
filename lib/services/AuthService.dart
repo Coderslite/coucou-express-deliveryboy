@@ -13,7 +13,8 @@ class AuthService {
 
   Future<AuthCredential> getGoogleAuthCredential() async {
     GoogleSignInAccount googleAccount = (await GoogleSignIn().signIn())!;
-    GoogleSignInAuthentication googleAuthentication = await googleAccount.authentication;
+    GoogleSignInAuthentication googleAuthentication =
+        await googleAccount.authentication;
     AuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleAuthentication.idToken,
       accessToken: googleAuthentication.accessToken,
@@ -39,17 +40,34 @@ class AuthService {
     }
   }
 
-  Future<UserModel> signUpWithEmailPassword({required String email, required String password, String? displayName, String? number}) async {
-    return await _auth.createUserWithEmailAndPassword(email: email, password: password).then((value) async {
-      return await signInWithEmailPassword(email: value.user!.email!, password: password, displayName: displayName, number: number);
+  Future<UserModel> signUpWithEmailPassword(
+      {required String email,
+      required String password,
+      String? displayName,
+      String? number}) async {
+    return await _auth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) async {
+      return await signInWithEmailPassword(
+          email: value.user!.email!,
+          password: password,
+          displayName: displayName,
+          number: number);
     }).catchError((error) {
       throw error.toString();
     });
   }
 
-  Future<UserModel> signInWithEmailPassword({required String email, required String password, String? displayName, String? number}) async {
-    return await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
-      return await loginFromFirebaseUser(value.user!, LoginTypeApp, fullName: displayName, number: number);
+  Future<UserModel> signInWithEmailPassword(
+      {required String email,
+      required String password,
+      String? displayName,
+      String? number}) async {
+    return await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) async {
+      return await loginFromFirebaseUser(value.user!, LoginTypeApp,
+          fullName: displayName, number: number);
     }).catchError((error) async {
       if (!await isNetworkAvailable()) {
         throw errorInternetNotAvailable;
@@ -59,11 +77,13 @@ class AuthService {
     });
   }
 
-  Future<UserModel> loginFromFirebaseUser(User currentUser, String loginType, {String? fullName, String? number}) async {
+  Future<UserModel> loginFromFirebaseUser(User currentUser, String loginType,
+      {String? fullName, String? number}) async {
     UserModel userModel = UserModel();
 
     if (await userService.isUserExist(currentUser.email, loginType)) {
       await userService.getUserByEmail(currentUser.email).then((user) async {
+        print(user.role);
         if (user.role == DELIVERY_BOY) {
           ///Return user data
           userModel = user;
@@ -74,6 +94,8 @@ class AuthService {
         throw e;
       });
     } else {
+      print("phone number driver $number");
+
       /// Create user
       userModel.uid = currentUser.uid;
       userModel.email = currentUser.email;
@@ -92,7 +114,9 @@ class AuthService {
       userModel.address = '';
       userModel.availabilityStatus = true;
 
-      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((value) {
+      await userService
+          .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
+          .then((value) {
         //
       }).catchError((e) {
         throw e;

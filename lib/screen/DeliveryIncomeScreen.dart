@@ -25,7 +25,9 @@ class DeliveryIncomeScreenState extends State<DeliveryIncomeScreen> {
   Future<void> init() async {
     orderServices.deliveryOrderCharges().listen((event) {
       event.forEach((element) {
-        element.deliveryCharge != null ? total = total.validate() + element.deliveryCharge!.validate() : SizedBox();
+        element.deliveryCharge != null
+            ? total = total.validate() + element.deliveryCharge!.validate()
+            : SizedBox();
       });
       setState(() {});
     });
@@ -45,7 +47,8 @@ class DeliveryIncomeScreenState extends State<DeliveryIncomeScreen> {
           PaginateFirestore(
             itemBuilderType: PaginateBuilderType.listView,
             itemBuilder: (context, documentSnapshot, index) {
-              OrderModel orderData = OrderModel.fromJson(documentSnapshot[index].data() as Map<String, dynamic>);
+              OrderModel orderData = OrderModel.fromJson(
+                  documentSnapshot[index].data() as Map<String, dynamic>);
               return DeliveryIncomeWidget(orderData: orderData);
             },
             query: orderServices.orderQuery1(),
@@ -60,23 +63,31 @@ class DeliveryIncomeScreenState extends State<DeliveryIncomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                commonCachedNetworkImage('images/Empty.png', height: 150, width: 150, fit: BoxFit.cover),
+                commonCachedNetworkImage('images/Empty.png',
+                    height: 150, width: 150, fit: BoxFit.cover),
                 16.height,
-                Text(appStore.translate('order_not_found'), style: boldTextStyle()),
+                Text(appStore.translate('order_not_found'),
+                    style: boldTextStyle()),
               ],
             ).center(),
-            onError: (e) => Text(e.toString(), style: primaryTextStyle()).center(),
+            onError: (e) =>
+                Text(e.toString(), style: primaryTextStyle()).center(),
           ).paddingOnly(top: 60),
           Container(
             margin: EdgeInsets.all(8),
             padding: EdgeInsets.all(16),
             width: context.width(),
-            decoration: boxDecorationRoundedWithShadow(12, backgroundColor: primaryColor),
+            decoration: boxDecorationRoundedWithShadow(12,
+                backgroundColor: primaryColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(appStore.translate('total_Income'), style: primaryTextStyle(color: white)),
-                Text(total.toCurrencyAmount().toString().validate(), style: boldTextStyle(color: white), textAlign: TextAlign.end).expand()
+                Text(appStore.translate('total_Income'),
+                    style: primaryTextStyle(color: white)),
+                Text(getAmount(total!),
+                        style: boldTextStyle(color: white),
+                        textAlign: TextAlign.end)
+                    .expand()
               ],
             ),
           ),
