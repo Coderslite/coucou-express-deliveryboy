@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:food_delivery/screen/CompleteProfileScreen.dart';
 import 'package:food_delivery/screen/DashboardScreen.dart';
+import 'package:food_delivery/screen/EmailScreen.dart';
 import 'package:food_delivery/screen/ForgotPasswordScreen.dart';
 import 'package:food_delivery/screen/SignUpScreen.dart';
 import 'package:food_delivery/utils/Colors.dart';
@@ -39,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
-    if (getStringAsync(PLAYER_ID).isNotEmpty) saveOneSignalPlayerId();
+    // if (getStringAsync(PLAYER_ID).isNotEmpty) saveOneSignalPlayerId();
 
     Geolocator.requestPermission();
   }
@@ -170,7 +171,7 @@ class LoginScreenState extends State<LoginScreen> {
                           onTap: () async {
                             if (await checkPermission()) {
                               if (getStringAsync(PLAYER_ID).isEmpty) {
-                                await saveOneSignalPlayerId();
+                                // await saveOneSignalPlayerId();
                                 if (getStringAsync(PLAYER_ID).isEmpty)
                                   return toast(errorMessage);
                               }
@@ -219,7 +220,7 @@ class LoginScreenState extends State<LoginScreen> {
                             Text(appStore.translate('sign_up'),
                                     style: boldTextStyle(color: errorColor))
                                 .onTap(() {
-                              SignUpScreen().launch(context);
+                              EmailScreen().launch(context);
                             })
                           ],
                         )

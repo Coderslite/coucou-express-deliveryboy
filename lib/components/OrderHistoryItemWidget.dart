@@ -3,6 +3,7 @@ import 'package:food_delivery/main.dart';
 import 'package:food_delivery/model/OrderModel.dart';
 import 'package:food_delivery/model/UserModel.dart';
 import 'package:food_delivery/screen/OrderDetailScreen.dart';
+import 'package:food_delivery/screen/track_order/OrderChat.dart';
 import 'package:food_delivery/utils/Colors.dart';
 import 'package:food_delivery/utils/Common.dart';
 import 'package:intl/intl.dart';
@@ -50,8 +51,12 @@ class OrderHistoryItemWidgetState extends State<OrderHistoryItemWidget> {
 
         return InkWell(
           onTap: () {
-            OrderDetailScreen(
-              orderModel: widget.orderData,
+            // OrderDetailScreen(
+            //   orderModel: widget.orderData,
+            // ).launch(context);
+
+            OrderChatScreen(
+              order: widget.orderData!,
             ).launch(context);
           },
           child: Container(

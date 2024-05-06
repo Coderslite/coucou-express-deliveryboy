@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color(0xFF5bae52);
+const primaryColor = Color(0xFF016837);
 const blueButtonColor = Color(0xFF448AFF);
 const backColor = Color(0xDD000000);
 const textNameColor = Color(0xFF405D6D);

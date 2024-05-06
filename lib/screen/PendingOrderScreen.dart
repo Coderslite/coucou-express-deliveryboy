@@ -1,16 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:food_delivery/components/PendingOrderItemWidget.dart';
 import 'package:food_delivery/functions/SendNotification.dart';
 import 'package:food_delivery/model/OrderModel.dart';
+import 'package:food_delivery/screen/track_order/SelectOrder.dart';
 import 'package:food_delivery/utils/Colors.dart';
 import 'package:food_delivery/utils/Common.dart';
 import 'package:food_delivery/utils/Constants.dart';
 import 'package:food_delivery/utils/ModelKey.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 
 import '../main.dart';
 import 'OrderDetailScreen.dart';
@@ -60,10 +61,10 @@ class PendingOrderScreenState extends State<PendingOrderScreen> {
                   ).paddingAll(10).visible(getBoolAsync(AVAILABLE) == false ||
                       getBoolAsync(AVAILABLE).toString() == 'null'),
                   Expanded(
-                    child: PaginateFirestore(
+                    child: FirestorePagination(
                       key: uniqueKey,
                       itemBuilder: (BuildContext context, items, index) {
-                        var order = items[index].data() as Map<String, dynamic>;
+                        var order = items.data() as Map<String, dynamic>;
                         // return order['orderStatus'] == NO_DRIVER_AVAILABLE
                         return PendingOrderItemWidget(
                           index: index,
@@ -92,26 +93,24 @@ class PendingOrderScreenState extends State<PendingOrderScreen> {
                                   },
                                 );
                                 setBoolAsync(AVAILABLE, false);
-                                orderServices.updateDocument(items[index].id, {
+                                orderServices.updateDocument(order['id'], {
                                   OrderKey.deliveryBoyId:
                                       getStringAsync(USER_ID),
                                   "taken": true,
                                   'orderStatus': ORDER_ACCEPTED,
                                 });
-                                OrderDetailScreen(
-                                  orderModel: OrderModel.fromJson(order),
+                                SelectOrderScreen(
+                                  order: OrderModel.fromJson(order),
                                 ).launch(context);
                               });
                             });
                           },
                         );
                       },
-                      itemBuilderType: PaginateBuilderType.listView,
                       query: orderServices.pendingOrderQuery(),
                       isLive: true,
                       physics: ClampingScrollPhysics(),
                       // shrinkWrap: true,
-                      itemsPerPage: DocLimit,
                       bottomLoader: Loader(),
                       initialLoader: Loader(),
                       onEmpty: Column(
@@ -125,9 +124,6 @@ class PendingOrderScreenState extends State<PendingOrderScreen> {
                               style: boldTextStyle()),
                         ],
                       ).center(),
-                      onError: (e) =>
-                          Text(e.toString(), style: primaryTextStyle())
-                              .center(),
                     ),
                   ),
                 ],

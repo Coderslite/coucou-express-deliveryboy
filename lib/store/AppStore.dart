@@ -116,7 +116,7 @@ abstract class _AppStore with Store {
     }
 
     appBarTheme = AppBarTheme(
-      brightness: appStore.isDarkMode ? Brightness.dark : Brightness.light,
+      // brightness: appStore.isDarkMode ? Brightness.dark : Brightness.light,
       systemOverlayStyle: SystemUiOverlayStyle(
           statusBarIconBrightness:
               appStore.isDarkMode ? Brightness.dark : Brightness.light),

@@ -13,6 +13,8 @@ import '../model/UserModel.dart';
 import '../utils/Constants.dart';
 
 class SignUpScreen extends StatefulWidget {
+  final String email;
+  const SignUpScreen({required this.email});
   static String tag = '/SignUpScreen';
 
   @override
@@ -23,7 +25,6 @@ class SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController passWordController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -59,7 +60,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
             await authService
                 .signUpWithEmailPassword(
-              email: emailController.text.trim(),
+              email: widget.email.trim(),
               password: passWordController.text.trim(),
               displayName: usernameController.text.trim(),
               number: numberController.text.trim(),
@@ -70,38 +71,8 @@ class SignUpScreenState extends State<SignUpScreen> {
               LoginScreen().launch(context, isNewTask: true);
             }).catchError((error) async {
               appStore.setLoading(false);
-              if (error.toString() ==
-                  '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
-                var user = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passWordController.text);
-                var currentUser = user.user;
-                UserModel userModel = UserModel();
-                userModel.uid = currentUser!.uid;
-                userModel.email = currentUser.email;
-                userModel.name =
-                    (currentUser.displayName) ?? usernameController.text;
-                userModel.photoUrl = '';
-                userModel.createdAt = DateTime.now();
-                userModel.updatedAt = DateTime.now();
-                userModel.city = appStore.userCurrentCity;
-                userModel.isDeleted = false;
-                userModel.loginType = 'app';
-                userModel.oneSignalPlayerId = getStringAsync(PLAYER_ID);
-                userModel.type = 0;
-                userModel.role = DELIVERY_BOY;
-                userModel.number = numberController.text.validate();
-                userModel.isTester = false;
-                userModel.address = '';
-                userModel.availabilityStatus = true;
-                await userService.addDocumentWithCustomId(
-                    emailController.text, userModel.toJson());
-                LoginScreen().launch(context);
-              } else {
-                print("no firebase exception");
-                toast(error);
-              }
+              print("no firebase exception");
+              toast(error);
             });
           }
         }).catchError((e) {
@@ -151,17 +122,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                               appStore.translate('this_field_is_required'),
                           decoration: buildInputDecoration(
                               appStore.translate('full_name')),
-                        ),
-                        16.height,
-                        AppTextField(
-                          controller: emailController,
-                          focus: emailFocus,
-                          nextFocus: numberFocus,
-                          textFieldType: TextFieldType.EMAIL,
-                          errorThisFieldRequired:
-                              appStore.translate('this_field_is_required'),
-                          decoration:
-                              buildInputDecoration(appStore.translate('email')),
                         ),
                         16.height,
                         AppTextField(

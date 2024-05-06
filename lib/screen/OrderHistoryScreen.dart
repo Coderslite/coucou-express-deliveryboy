@@ -5,7 +5,7 @@ import 'package:food_delivery/utils/Colors.dart';
 import 'package:food_delivery/utils/Common.dart';
 import 'package:food_delivery/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
+import 'package:firebase_pagination/firebase_pagination.dart';
 
 import '../main.dart';
 
@@ -40,17 +40,22 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
       child: Scaffold(
         appBar:
             appBarWidget(appStore.translate('order_history'), showBack: false),
-        body: PaginateFirestore(
-          itemBuilderType: PaginateBuilderType.listView,
+        body: FirestorePagination(
           itemBuilder: (context, documentSnapshot, index) {
+            print(index);
+            print(getStringAsync(USER_ID));
             return OrderHistoryItemWidget(OrderModel.fromJson(
-                documentSnapshot[index].data() as Map<String, dynamic>));
+                documentSnapshot.data() as Map<String, dynamic>));
           },
           query: orderServices.orderQuery(
             orderStatus: [
               ORDER_ACCEPTED,
               ORDER_PICKUP,
               ORDER_DELIVERED,
+              ORDER_ARRIVED,
+              ORDER_AWAIT_CUSTOMER,
+              ORDER_CONFIRMED,
+              ORDER_BUYFROM
             ],
             // city: appStore.userCurrentCity,
             deliveryBoyId: getStringAsync(USER_ID),
@@ -60,7 +65,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
           physics: ClampingScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.all(8),
-          itemsPerPage: DocLimit,
+          // itemsPerPage: DocLimit,
           bottomLoader: Loader(),
           initialLoader: Loader(),
           onEmpty: Column(
@@ -74,8 +79,6 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   style: boldTextStyle()),
             ],
           ).center(),
-          onError: (e) =>
-              Text(e.toString(), style: primaryTextStyle()).center(),
         ),
       ),
     );

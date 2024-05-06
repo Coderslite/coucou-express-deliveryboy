@@ -51,14 +51,14 @@ class DashboardScreenState extends State<DashboardScreen>
   @override
   void afterFirstLayout(BuildContext context) {
     appStore.setAppLocalization(context);
-    OneSignal.shared
-        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-      if (!appStore.isLoggedIn) {
-        LoginScreen().launch(context, isNewTask: true);
-      } else {
-        //
-      }
-    });
+    // OneSignal.shared
+    //     .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+    //   if (!appStore.isLoggedIn) {
+    //     LoginScreen().launch(context, isNewTask: true);
+    //   } else {
+    //     //
+    //   }
+    // });
   }
 
   void updateUserProfile() async {
@@ -103,12 +103,6 @@ class DashboardScreenState extends State<DashboardScreen>
       },
       child: UpgradeAlert(
         upgrader: Upgrader(
-          canDismissDialog: false,
-          showIgnore: false,
-          showLater: false,
-          dialogStyle: Platform.isIOS
-              ? UpgradeDialogStyle.cupertino
-              : UpgradeDialogStyle.material,
           durationUntilAlertAgain: const Duration(minutes: 1),
         ),
         child: Scaffold(

@@ -1,3 +1,4 @@
+import 'package:firebase_pagination/firebase_pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/components/DeliveryIncomeWidget.dart';
 import 'package:food_delivery/main.dart';
@@ -6,7 +7,6 @@ import 'package:food_delivery/utils/Colors.dart';
 import 'package:food_delivery/utils/Common.dart';
 import 'package:food_delivery/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 
 class DeliveryIncomeScreen extends StatefulWidget {
   @override
@@ -44,8 +44,7 @@ class DeliveryIncomeScreenState extends State<DeliveryIncomeScreen> {
       appBar: appBarWidget(appStore.translate('my_Income')),
       body: Stack(
         children: [
-          PaginateFirestore(
-            itemBuilderType: PaginateBuilderType.listView,
+          FirestorePagination(
             itemBuilder: (context, documentSnapshot, index) {
               OrderModel orderData = OrderModel.fromJson(
                   documentSnapshot[index].data() as Map<String, dynamic>);
@@ -56,7 +55,6 @@ class DeliveryIncomeScreenState extends State<DeliveryIncomeScreen> {
             physics: ClampingScrollPhysics(),
             shrinkWrap: true,
             padding: EdgeInsets.all(8),
-            itemsPerPage: DocLimit,
             bottomLoader: Loader(),
             initialLoader: Loader(),
             onEmpty: Column(
@@ -70,8 +68,6 @@ class DeliveryIncomeScreenState extends State<DeliveryIncomeScreen> {
                     style: boldTextStyle()),
               ],
             ).center(),
-            onError: (e) =>
-                Text(e.toString(), style: primaryTextStyle()).center(),
           ).paddingOnly(top: 60),
           Container(
             margin: EdgeInsets.all(8),

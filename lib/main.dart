@@ -168,7 +168,8 @@ void main() async {
 
 void _displayLocalNotification(RemoteMessage message) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('com.coucouexpress.delivery', 'Coucou Express Delivery',
+      AndroidNotificationDetails(
+          'com.coucouexpress.delivery', 'Coucou Express Delivery',
           importance: Importance.max, priority: Priority.high);
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);

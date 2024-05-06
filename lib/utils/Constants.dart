@@ -60,12 +60,14 @@ const PRIVACY_POLICY_PREF = 'PrivacyPolicyPref';
 
 /* order Status key */
 const ORDER_PENDING = 'Pending';
-const ORDER_RECEIVED = 'Received';
-const ORDER_ACCEPTED = 'Accepted';
+const ORDER_ACCEPTED = 'Order Accepted';
+const ORDER_AWAIT_CUSTOMER = 'Order Await Customer';
+const ORDER_CONFIRMED = 'Order Confirmed';
+const ORDER_BUYFROM = 'Arrived BuyFrom';
 const ORDER_PICKUP = 'Pickup';
+const ORDER_ARRIVED= 'Arrived Location';
 const ORDER_DELIVERED = 'Delivered';
 const ORDER_CANCELLED = 'Cancelled';
-const ORDER_UPDATED = 'Order Updated';
 
 const ORDER_PAYMENT_METHOD = 'paymentMethod';
 const ORDER_PAYMENT_STATUS = 'paymentStatus';

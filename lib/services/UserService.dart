@@ -21,6 +21,14 @@ class UserService extends BaseService {
     return res.docs.length == 1;
   }
 
+  Future<bool> isEmailExist(String? email) async {
+    Query query = ref.where(UserKey.email, isEqualTo: email);
+
+    var res = await query.get();
+
+    return res.docs.length == 1;
+  }
+
   Future<UserModel> getUserByEmail(String? email) {
     return ref
         .where(UserKey.email, isEqualTo: email)
@@ -50,6 +58,15 @@ class UserService extends BaseService {
         throw 'User not found';
       }
     });
+  }
+
+  Stream<UserModel> getUserById2({String? userId}) {
+    var userRef = ref
+        .where(UserKey.uid, isEqualTo: userId)
+        .where('role', isEqualTo: 'User')
+        .snapshots();
+    return userRef.map((event) =>
+        UserModel.fromJson(event.docs.first.data() as Map<String, dynamic>));
   }
 
   Future<bool> isUserExists(String id) async {

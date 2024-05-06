@@ -75,7 +75,7 @@ class OrderService extends BaseService {
 
   Query pendingOrderQuery() {
     return ref
-        .where('orderStatus', isEqualTo: ORDER_RECEIVED)
+        .where('orderStatus', isEqualTo: ORDER_PENDING)
         .where('deliveryBoyId', isEqualTo: null)
         .where('taken', isEqualTo: false)
         .orderBy('createdAt', descending: false);

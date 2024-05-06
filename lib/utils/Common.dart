@@ -133,12 +133,12 @@ Future<String?> getUserCurrentCity() async {
   }
 }
 
-Future<void> saveOneSignalPlayerId() async {
-  await OneSignal.shared.getDeviceState().then((value) async {
-    if (value!.userId.validate().isNotEmpty)
-      await setValue(PLAYER_ID, value.userId.validate());
-  });
-}
+// Future<void> saveOneSignalPlayerId() async {
+//   await OneSignal.shared.getDeviceState().then((value) async {
+//     if (value!.userId.validate().isNotEmpty)
+//       await setValue(PLAYER_ID, value.userId.validate());
+//   });
+// }
 
 String getCurrency(String amt) {
   String amount = "${appStore.currency} ${0}";
@@ -187,7 +187,7 @@ Future<void> sendPushNotifications(
 }
 
 String getOrderStatusText(String orderStatus) {
-  if (orderStatus == ORDER_RECEIVED) {
+  if (orderStatus == ORDER_ACCEPTED) {
     return appStore.translate('order_is_being_approved');
   } else if (orderStatus == ORDER_ACCEPTED) {
     return "A delivery boy is assigned";
@@ -202,7 +202,7 @@ String getOrderStatusText(String orderStatus) {
 }
 
 Color getOrderStatusColor(String? orderStatus) {
-  if (orderStatus == ORDER_RECEIVED) {
+  if (orderStatus == ORDER_ACCEPTED) {
     return Color(0xFF9A8500);
   } else if (orderStatus == ORDER_PENDING) {
     return Color(0xFF6A8500);

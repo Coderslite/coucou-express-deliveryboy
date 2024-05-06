@@ -168,5 +168,5 @@ class _UploadFileState extends State<UploadFile> {
         ),
       ),
     );
-  }
 }
+  }
